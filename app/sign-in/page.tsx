@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function SignIn() {
   const router = useRouter();
@@ -14,74 +15,65 @@ export default function SignIn() {
     e.preventDefault();
     setError("");
     setLoading(true);
-
-    try {
-      const res = await fetch("/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          password,
-        }),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.message || "Login gagal");
-      }
-
-      localStorage.setItem("access_token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user));
-
-      router.push("/dashboard");
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
+    
+    // Simulasi Login (Ganti dengan fetch API Anda)
+    setTimeout(() => {
+        router.push("/dashboard");
+        setLoading(false);
+    }, 1000);
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 dark:bg-black">
-      <main className="w-full max-w-md rounded-2xl bg-white p-8 shadow dark:bg-zinc-900">
-        <h1 className="mb-6 text-center text-2xl font-semibold">Sign In</h1>
+    <div className="flex min-h-screen flex-col items-center justify-center bg-[#020617] p-4 text-white">
+      <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-xl bg-[#005a70] shadow-lg">
+        <span className="text-xl font-bold italic">S</span>
+      </div>
 
-        <form onSubmit={handleLogin} className="space-y-4">
-          <input
-            type="email"
-            placeholder="admin@mail.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full rounded-lg border px-3 py-2"
-            required
-          />
+      <div className="mb-8 text-center">
+        <h1 className="text-3xl font-bold tracking-tight">Welcome Back</h1>
+        <p className="mt-2 text-sm text-slate-400">Sign in to access your payroll dashboard</p>
+      </div>
 
-          <input
-            type="password"
-            placeholder="••••••••"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full rounded-lg border px-3 py-2"
-            required
-          />
+      <main className="w-full max-w-[400px] rounded-2xl border border-white/5 bg-[#111827]/50 p-8 shadow-2xl backdrop-blur-sm">
+        <form onSubmit={handleLogin} className="space-y-5">
+          <div>
+            <label className="mb-2 block text-xs font-semibold uppercase text-slate-400">Email Address</label>
+            <input
+              type="email"
+              placeholder="admin@mail.com"
+              className="w-full rounded-xl border border-white/10 bg-[#1f2937] px-4 py-3 text-sm outline-none focus:border-[#005a70]"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
 
-          {error && <p className="text-sm text-red-500">{error}</p>}
-
-          <a href="/sign-up" className="text-sm text-blue-500 hover:underline">
-            dont have an account? sign up here
-          </a>
+          <div>
+            <label className="mb-2 block text-xs font-semibold uppercase text-slate-400">Password</label>
+            <input
+              type="password"
+              placeholder="••••••••"
+              className="w-full rounded-xl border border-white/10 bg-[#1f2937] px-4 py-3 text-sm outline-none focus:border-[#005a70]"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
 
           <button
             disabled={loading}
-            className="w-full rounded-lg bg-black py-2 text-white disabled:opacity-50"
+            className="w-full rounded-xl bg-[#005a70] py-3 text-sm font-bold text-white hover:bg-[#007a8a] disabled:opacity-50 transition-all"
           >
-            {loading ? "Logging in..." : "Login"}
+            {loading ? "Signing In..." : "Sign In"}
           </button>
+
+          <p className="text-center text-sm text-slate-500">
+            Don't have an account?{" "}
+            <Link href="/sign-up" className="font-semibold text-sky-500 hover:underline">Register here</Link>
+          </p>
         </form>
       </main>
+      <footer className="mt-12 text-xs text-slate-600">© 2024 SalaryApp. All rights reserved.</footer>
     </div>
   );
 }

@@ -1,161 +1,118 @@
 "use client";
 
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
-// Pastikan lucide-react sudah terinstall
-import { 
-  LayoutGrid, 
-  Database, 
-  Hotel, 
-  Briefcase, 
-  Users, 
-  UserCircle, 
-  Settings2, 
-  CalendarCheck, 
-  CalendarDays, 
-  Wallet, 
-  LogOut, 
-  ChevronDown 
-} from 'lucide-react';
+import React from 'react';
+import { Users, Building2, Wallet, Clock, Rocket, FileText, MoreHorizontal } from 'lucide-react';
 
 export default function DashboardPage() {
-  const router = useRouter();
-  const [isMasterOpen, setIsMasterOpen] = useState(true);
-  
-  // STATE BARU: Untuk menyimpan nama halaman yang sedang aktif
-  const [activePage, setActivePage] = useState("Dashboard Utama");
-
-  const handleLogout = () => {
-    localStorage.clear();
-    router.push("/sign-in");
-  };
-
-  // Fungsi untuk menangani klik menu
-  const handleMenuClick = (name: string) => {
-    setActivePage(name);
-  };
-
   return (
-    <div className="flex min-h-screen bg-[#F8FAFC]">
-      {/* --- SIDEBAR (Navy Blue sesuai gambar SalaryApp) --- */}
-      <aside className="w-64 bg-[#034C72] flex flex-col fixed h-full z-20 shadow-xl">
-        <div className="p-6 mb-2">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-[#00A99D] rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-lg">S</div>
-            <span className="text-xl font-bold text-white tracking-tight">Salary<span className="text-[#00A99D]">App</span></span>
-          </div>
+    <main className="p-8 font-sans bg-black min-h-screen text-white">
+      
+      {/* HEADER ATAS */}
+      <header className="flex justify-between items-start mb-10 border-b border-white/10 pb-6">
+        <div>
+          <h2 className="text-xl font-bold mb-1">Dashboard</h2>
         </div>
-
-        <nav className="flex-1 px-4 space-y-1 overflow-y-auto">
-          {/* Dashboard Menu */}
-          <button 
-            onClick={() => handleMenuClick("Dashboard Utama")}
-            className={`w-full flex items-center gap-3 p-3 rounded-xl transition-all mb-4 ${activePage === "Dashboard Utama" ? 'bg-[#ffffff15] border border-[#ffffff10] text-white shadow-sm' : 'text-slate-300 hover:bg-[#075985]'}`}
-          >
-            <LayoutGrid size={20} className={activePage === "Dashboard Utama" ? "text-[#00A99D]" : "text-slate-400"} />
-            <span className="text-sm font-medium">Dashboard</span>
-          </button>
-
-          {/* Master Section */}
-          <div className="mb-2">
-            <button 
-              onClick={() => setIsMasterOpen(!isMasterOpen)}
-              className="w-full flex items-center justify-between p-3 rounded-xl text-slate-300 hover:bg-[#075985] transition-colors"
-            >
-              <div className="flex items-center gap-3">
-                <Database size={20} className="text-slate-400" />
-                <span className="text-sm">Master</span>
-              </div>
-              <ChevronDown size={14} className={`transition-transform duration-300 ${isMasterOpen ? 'rotate-180' : ''}`} />
-            </button>
-
-            {isMasterOpen && (
-              <div className="ml-4 mt-2 space-y-1 border-l border-[#ffffff15]">
-                {[
-                  { name: 'Divisi', icon: Hotel },
-                  { name: 'Jabatan', icon: Briefcase },
-                  { name: 'Karyawan', icon: Users },
-                  { name: 'User', icon: UserCircle },
-                  { name: 'Konfigurasi', icon: Settings2 }
-                ].map((item) => (
-                  <button 
-                    key={item.name} 
-                    onClick={() => handleMenuClick(item.name)}
-                    className={`w-full flex items-center gap-3 p-2 pl-6 text-sm transition-all group ${activePage === item.name ? 'text-[#00A99D] font-bold' : 'text-slate-300 hover:text-[#00A99D]'}`}
-                  >
-                    <item.icon size={18} className={activePage === item.name ? "opacity-100" : "opacity-50"} /> 
-                    {item.name}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* Menu Lainnya */}
-          {[
-            { name: 'Presensi', icon: CalendarCheck },
-            { name: 'Cuti', icon: CalendarDays },
-            { name: 'Gaji', icon: Wallet }
-          ].map((menu) => (
-            <button 
-              key={menu.name}
-              onClick={() => handleMenuClick(menu.name)}
-              className={`w-full flex items-center gap-3 p-3 rounded-xl transition-all ${activePage === menu.name ? 'bg-[#ffffff15] text-white' : 'text-slate-300 hover:bg-[#075985]'}`}
-            >
-              <menu.icon size={20} className={activePage === menu.name ? "text-[#00A99D]" : "text-slate-400"} />
-              <span className="text-sm font-medium">{menu.name}</span>
-            </button>
-          ))}
-        </nav>
-
-        <div className="p-4 border-t border-[#ffffff10]">
-          <button onClick={handleLogout} className="w-full flex items-center gap-3 p-3 text-slate-400 hover:text-red-400 transition-all text-left">
-            <LogOut size={20} />
-            <span className="text-sm font-medium">Keluar</span>
-          </button>
-        </div>
-      </aside>
-
-      {/* --- MAIN CONTENT AREA --- */}
-      <div className="flex-1 flex flex-col ml-64">
-        {/* Navbar - JUDUL SEKARANG DINAMIS */}
-        <header className="h-16 bg-white border-b border-slate-200 px-8 flex items-center justify-between sticky top-0 z-10 shadow-sm">
-          <div>
-            <span className="text-[10px] text-slate-400 font-bold uppercase tracking-[0.2em] mb-1 block">Overview</span>
-            {/* Teks ini akan berubah sesuai menu yang diklik */}
-            <h2 className="text-sm font-bold text-slate-800 tracking-tight transition-all">
-              {activePage}
-            </h2>
-          </div>
-          
-          <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
             <div className="text-right">
-              <p className="text-sm font-bold text-slate-900 leading-none">Nurwan Soufwan</p>
-              <p className="text-[10px] text-[#00A99D] mt-1 font-black tracking-widest uppercase">Administrator</p>
+                <p className="text-sm font-bold text-white">Administrator</p>
+                <p className="text-xs text-slate-500">Payroll Management</p>
             </div>
-            <div className="w-10 h-10 rounded-full bg-slate-100 border-2 border-white shadow-md flex items-center justify-center font-bold text-slate-600 text-xs">NS</div>
-          </div>
-        </header>
-
-        {/* Content Body */}
-        <main className="p-8">
-          <div className="mb-10">
-            {/* Judul Konten juga berubah otomatis */}
-            <h1 className="text-3xl font-black text-slate-900 tracking-tight">Halaman {activePage}</h1>
-            <p className="text-sm text-slate-500 mt-1 font-medium">Manajemen data {activePage.toLowerCase()} SalaryApp.</p>
-          </div>
-
-          {/* Kartu Statistik tetap tampil */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-white p-8 rounded-3xl shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-slate-50 hover:border-[#00A99D] transition-all group">
-               <span className="text-[11px] font-bold text-slate-400 uppercase tracking-[0.15em]">Total Karyawan</span>
-               <h3 className="text-4xl font-black text-slate-900 mt-4 tracking-tighter group-hover:text-[#00A99D]">1,240</h3>
+            <div className="w-10 h-10 bg-[#1e1e1e] rounded-full flex items-center justify-center font-bold text-[#00A99D] border border-white/10">
+                A
             </div>
-            {/* ... kartu lainnya ... */}
-          </div>
-        </main>
+        </div>
+      </header>
+
+      {/* WELCOME SECTION */}
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold tracking-tight">Welcome back, Nurwan Soufwan!</h1>
+        <p className="text-slate-400 mt-2">Here's what's happening with your payroll system today.</p>
       </div>
-    </div>
+
+      {/* STATS CARDS ROW */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        
+        {/* Card 1: Total Karyawan */}
+        <div className="bg-[#111111] p-6 rounded-2xl border border-white/5 relative overflow-hidden group hover:border-[#00A99D]/50 transition-all">
+           <div className="flex justify-between items-start mb-4">
+              <Users className="text-slate-400 group-hover:text-[#00A99D] transition-colors" size={24} />
+              <span className="bg-[#00A99D]/20 text-[#00A99D] text-xs font-bold px-2 py-1 rounded">+12%</span>
+           </div>
+           <p className="text-slate-500 text-xs font-medium mb-1">Total Karyawan</p>
+           <h3 className="text-3xl font-bold text-white">124</h3>
+        </div>
+
+        {/* Card 2: Divisi */}
+        <div className="bg-[#111111] p-6 rounded-2xl border border-white/5 relative group hover:border-[#00A99D]/50 transition-all">
+           <div className="flex justify-between items-start mb-4">
+              <Building2 className="text-slate-400 group-hover:text-[#00A99D] transition-colors" size={24} />
+              <span className="bg-slate-800 text-slate-400 text-xs font-bold px-2 py-1 rounded">Stable</span>
+           </div>
+           <p className="text-slate-500 text-xs font-medium mb-1">Divisi</p>
+           <h3 className="text-3xl font-bold text-white">8</h3>
+        </div>
+
+        {/* Card 3: Payroll (GLOWING EFFECT) */}
+        <div className="bg-[#111111] p-6 rounded-2xl border border-white/10 relative group shadow-[0_0_40px_-10px_rgba(255,255,255,0.1)]">
+           {/* Efek Glow di belakang */}
+           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+           
+           <div className="flex justify-between items-start mb-4 relative z-10">
+              <Wallet className="text-[#FFD700]" size={24} /> {/* Ikon Emas */}
+              <span className="bg-[#00A99D]/20 text-[#00A99D] text-xs font-bold px-2 py-1 rounded">+5%</span>
+           </div>
+           <p className="text-slate-400 text-xs font-medium mb-1 relative z-10">Payroll Bulan Ini</p>
+           <h3 className="text-3xl font-bold text-white relative z-10">Rp 450M</h3>
+        </div>
+
+        {/* Card 4: Pending Approval */}
+        <div className="bg-[#111111] p-6 rounded-2xl border border-white/5 relative group hover:border-red-500/30 transition-all">
+           <div className="flex justify-between items-start mb-4">
+              <Clock className="text-slate-400 group-hover:text-red-400 transition-colors" size={24} />
+              <span className="bg-red-500/20 text-red-500 text-xs font-bold px-2 py-1 rounded">-2</span>
+           </div>
+           <p className="text-slate-500 text-xs font-medium mb-1">Pending Approval</p>
+           <h3 className="text-3xl font-bold text-white">12</h3>
+        </div>
+
+      </div>
+
+      {/* BOTTOM SECTION */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          
+          {/* Recent Activities */}
+          <div className="lg:col-span-2 bg-[#111111] p-6 rounded-2xl border border-white/5">
+            <h4 className="text-white font-bold mb-6 flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-[#00A99D]"></span> 
+              Recent Activities
+            </h4>
+            
+            <div className="space-y-6">
+              {[1, 2, 3].map((item, index) => (
+                <div key={index} className="flex gap-4 items-start group">
+                  <div className="bg-[#1e1e1e] p-3 rounded-lg text-slate-400 group-hover:text-[#00A99D] group-hover:bg-[#00A99D]/10 transition-all">
+                    <FileText size={18} />
+                  </div>
+                  <div>
+                    <h5 className="text-white font-bold text-sm group-hover:text-[#00A99D] transition-colors">Updated Divisi "IT Support"</h5>
+                    <p className="text-xs text-slate-500 mt-1">{2 + index * 2} hours ago</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* New Reports / Placeholder */}
+          <div className="bg-[#0a0a0a] p-6 rounded-2xl border border-white/5 border-dashed flex flex-col items-center justify-center text-center relative">
+             <div className="bg-[#1e1e1e] w-16 h-16 rounded-full flex items-center justify-center mb-4 text-white">
+                <Rocket size={24} />
+             </div>
+             <h5 className="text-white font-bold mb-2">New Reports Coming Soon</h5>
+             <p className="text-xs text-slate-500 max-w-[200px]">We're building advanced analytics for your payroll.</p>
+          </div>
+
+      </div>
+
+    </main>
   );
 }
