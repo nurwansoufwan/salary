@@ -1,108 +1,71 @@
 "use client";
-import { useState } from "react";
-import { Plus, Edit, Trash2 } from "lucide-react";
 
-export default function PageKaryawan() {
-  const [karyawanList] = useState([
-    { id: 1, nama: "Ahmad Fauzi", jabatan: "Manager IT", status: "AKTIF" },
-    { id: 2, nama: "Siti Aminah", jabatan: "HR Specialist", status: "AKTIF" },
-  ]);
+import React from "react";
+import { Plus, Search, MoreVertical, Users } from "lucide-react";
+
+export default function MasterKaryawanPage() {
+  const karyawan = [
+    { id: 1, nik: "2024001", nama: "Ahmad Fauzi", jabatan: "Manager IT", email: "ahmad@mail.com", status: "Aktif" },
+    { id: 2, nik: "2024002", nama: "Siti Aminah", jabatan: "Staff HRD", email: "siti@mail.com", status: "Aktif" },
+    { id: 3, nik: "2024003", nama: "Rudi Hartono", jabatan: "Staff Finance", email: "rudi@mail.com", status: "Non-Aktif" },
+  ];
 
   return (
-    <main className="p-8 font-sans bg-black min-h-screen text-white">
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold mb-1">Management Karyawan</h1>
-        <p className="text-slate-400 text-sm">Manage employee records and information.</p>
+    <div className="min-h-screen bg-[#020617] text-slate-200 p-8">
+      <div className="flex justify-between items-center mb-6">
+        <div>
+            <h1 className="text-2xl font-bold text-white flex items-center gap-2">
+                <Users className="text-[#00A99D]" /> Data Karyawan
+            </h1>
+            <p className="text-slate-400 text-sm">Database seluruh pegawai perusahaan.</p>
+        </div>
+        <button className="bg-[#005a70] hover:bg-[#004a5c] text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition">
+          <Plus size={16} /> Karyawan Baru
+        </button>
       </div>
 
-      <div className="grid grid-cols-1 xl:grid-cols-12 gap-8">
-        <div className="xl:col-span-4">
-          <div className="bg-[#111] p-6 rounded-xl border border-white/10">
-            <h3 className="font-bold mb-6 flex items-center gap-2"><Plus size={18} /> Tambah Karyawan</h3>
-            <form className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                   <label className="block text-xs font-bold text-slate-400 mb-2">NIK</label>
-                   <input type="text" placeholder="NIK" className="w-full bg-[#1e1e1e] border border-white/10 rounded-lg p-3 text-sm text-white focus:outline-none focus:border-[#00A99D]"/>
-                </div>
-                <div>
-                   <label className="block text-xs font-bold text-slate-400 mb-2">Nama</label>
-                   <input type="text" placeholder="Nama Lengkap" className="w-full bg-[#1e1e1e] border border-white/10 rounded-lg p-3 text-sm text-white focus:outline-none focus:border-[#00A99D]"/>
-                </div>
-              </div>
-              <div>
-                <label className="block text-xs font-bold text-slate-400 mb-2">Email</label>
-                <input type="email" placeholder="email@company.com" className="w-full bg-[#1e1e1e] border border-white/10 rounded-lg p-3 text-sm text-white focus:outline-none focus:border-[#00A99D]"/>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                   <label className="block text-xs font-bold text-slate-400 mb-2">Tempat Lahir</label>
-                   <input type="text" placeholder="Kota" className="w-full bg-[#1e1e1e] border border-white/10 rounded-lg p-3 text-sm text-white focus:outline-none focus:border-[#00A99D]"/>
-                </div>
-                <div>
-                   <label className="block text-xs font-bold text-slate-400 mb-2">Tanggal Lahir</label>
-                   <input type="date" className="w-full bg-[#1e1e1e] border border-white/10 rounded-lg p-3 text-sm text-slate-400 focus:outline-none focus:border-[#00A99D]"/>
-                </div>
-              </div>
-              <div>
-                <label className="block text-xs font-bold text-slate-400 mb-2">Alamat</label>
-                <textarea placeholder="Alamat Lengkap" rows={3} className="w-full bg-[#1e1e1e] border border-white/10 rounded-lg p-3 text-sm text-white focus:outline-none focus:border-[#00A99D]"></textarea>
-              </div>
-              <div>
-                <label className="block text-xs font-bold text-slate-400 mb-2">Jabatan</label>
-                <select className="w-full bg-[#1e1e1e] border border-white/10 rounded-lg p-3 text-sm text-slate-400 focus:outline-none focus:border-[#00A99D]">
-                    <option>Pilih Jabatan</option>
-                    <option>Manager IT</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-xs font-bold text-slate-400 mb-2">Status Aktif</label>
-                <select className="w-full bg-[#1e1e1e] border border-white/10 rounded-lg p-3 text-sm text-white focus:outline-none focus:border-[#00A99D]">
-                    <option>Aktif</option>
-                    <option>Tidak Aktif</option>
-                </select>
-              </div>
-              <button className="w-full bg-[#005fcc] hover:bg-blue-600 text-white py-3 rounded-lg font-bold transition-all text-sm mt-2">
-                Simpan
-              </button>
-            </form>
-          </div>
-        </div>
-
-        <div className="xl:col-span-8">
-          <div className="bg-[#111] p-6 rounded-xl border border-white/10">
-            <div className="flex justify-between items-center mb-6">
-              <h3 className="font-bold">Data Karyawan</h3>
-              <span className="text-xs bg-[#00A99D]/20 text-[#00A99D] px-3 py-1 rounded-full font-bold">{karyawanList.length} Items Total</span>
-            </div>
-            <table className="w-full text-left text-sm">
-              <thead className="bg-[#1e1e1e] text-slate-400 font-bold uppercase text-xs">
-                <tr>
-                  <th className="p-4 rounded-l-lg">NO</th>
-                  <th className="p-4">NAMA</th>
-                  <th className="p-4">JABATAN</th>
-                  <th className="p-4">STATUS</th>
-                  <th className="p-4 text-right rounded-r-lg">AKSI</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-white/5">
-                {karyawanList.map((item, index) => (
-                  <tr key={item.id} className="hover:bg-white/5 transition-colors">
-                    <td className="p-4 text-slate-400">{index + 1}</td>
-                    <td className="p-4 font-bold">{item.nama}</td>
-                    <td className="p-4"><span className="bg-[#2d2d2d] border border-white/10 px-2 py-1 rounded text-xs text-slate-300">{item.jabatan}</span></td>
-                    <td className="p-4"><span className="bg-[#00A99D]/20 text-[#00A99D] px-2 py-1 rounded-full text-xs font-bold">{item.status}</span></td>
-                    <td className="p-4 text-right flex justify-end gap-2">
-                       <button className="text-yellow-500 hover:text-yellow-400"><Edit size={16} /></button>
-                       <button className="text-red-500 hover:text-red-400"><Trash2 size={16} /></button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+      {/* Filter Bar */}
+      <div className="bg-[#0f172a] p-4 rounded-xl border border-slate-800 mb-6 flex gap-4">
+        <div className="relative flex-1">
+            <Search className="absolute left-3 top-2.5 text-slate-500" size={18} />
+            <input type="text" placeholder="Cari nama atau NIK..." className="w-full bg-[#020617] border border-slate-700 rounded-lg pl-10 pr-4 py-2 text-white focus:outline-none focus:border-[#00A99D]" />
         </div>
       </div>
-    </main>
+
+      {/* Table */}
+      <div className="bg-[#0f172a] border border-slate-800 rounded-xl overflow-hidden">
+        <table className="w-full text-left text-sm">
+          <thead className="bg-[#1e293b] text-slate-400 uppercase">
+            <tr>
+              <th className="px-6 py-4">Karyawan</th>
+              <th className="px-6 py-4">Jabatan</th>
+              <th className="px-6 py-4">Email</th>
+              <th className="px-6 py-4">Status</th>
+              <th className="px-6 py-4 text-right">Opsi</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-slate-800">
+            {karyawan.map((item) => (
+              <tr key={item.id} className="hover:bg-slate-800/50">
+                <td className="px-6 py-4">
+                    <div className="font-bold text-white">{item.nama}</div>
+                    <div className="text-xs text-slate-500">NIK: {item.nik}</div>
+                </td>
+                <td className="px-6 py-4 text-slate-300">{item.jabatan}</td>
+                <td className="px-6 py-4 text-slate-400">{item.email}</td>
+                <td className="px-6 py-4">
+                    <span className={`px-2 py-1 rounded text-xs font-bold ${item.status === 'Aktif' ? 'bg-emerald-500/10 text-emerald-500' : 'bg-slate-700 text-slate-400'}`}>
+                        {item.status}
+                    </span>
+                </td>
+                <td className="px-6 py-4 text-right">
+                  <button className="text-slate-400 hover:text-white"><MoreVertical size={18} /></button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
   );
 }

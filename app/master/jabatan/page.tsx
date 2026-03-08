@@ -1,82 +1,55 @@
 "use client";
-import { useState } from "react";
-import { Plus, Edit, Trash2 } from "lucide-react";
 
-export default function PageJabatan() {
-  const [jabatanList] = useState([
-    { id: 1, jabatan: "STAFF", divisi: "INFORMATION TECHNOLOGY", gaji: 3000000 },
-    { id: 2, jabatan: "HEAD OF", divisi: "HRD", gaji: 5000000 },
-  ]);
+import React from "react";
+import { Plus, Pencil, Trash2, Briefcase } from "lucide-react";
+
+export default function MasterJabatanPage() {
+  const jabatan = [
+    { id: 1, nama: "Senior Manager", gapok: "15.000.000", tunjangan: "5.000.000" },
+    { id: 2, nama: "Manager", gapok: "10.000.000", tunjangan: "3.000.000" },
+    { id: 3, nama: "Supervisor", gapok: "7.000.000", tunjangan: "1.500.000" },
+    { id: 4, nama: "Staff", gapok: "4.500.000", tunjangan: "500.000" },
+  ];
 
   return (
-    <main className="p-8 font-sans bg-black min-h-screen text-white">
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold mb-1">Management Jabatan</h1>
-        <p className="text-slate-400 text-sm">Configure positions and salary structures.</p>
+    <div className="min-h-screen bg-[#020617] text-slate-200 p-8">
+      <div className="flex justify-between items-center mb-6">
+        <div>
+            <h1 className="text-2xl font-bold text-white flex items-center gap-2">
+                <Briefcase className="text-[#00A99D]" /> Master Jabatan
+            </h1>
+            <p className="text-slate-400 text-sm">Atur gaji pokok dan tunjangan per jabatan.</p>
+        </div>
+        <button className="bg-[#005a70] hover:bg-[#004a5c] text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition">
+          <Plus size={16} /> Tambah Jabatan
+        </button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
-        <div className="md:col-span-4">
-          <div className="bg-[#111] p-6 rounded-xl border border-white/10">
-            <h3 className="font-bold mb-6 flex items-center gap-2"><Plus size={18} /> Tambah Jabatan</h3>
-            <form className="space-y-4">
-              <div>
-                <label className="block text-xs font-bold text-slate-400 mb-2">Nama Jabatan</label>
-                <input type="text" placeholder="Contoh: Manager IT" className="w-full bg-[#1e1e1e] border border-white/10 rounded-lg p-3 text-sm text-white focus:outline-none focus:border-[#00A99D]"/>
-              </div>
-              <div>
-                <label className="block text-xs font-bold text-slate-400 mb-2">Pilih Divisi</label>
-                <select className="w-full bg-[#1e1e1e] border border-white/10 rounded-lg p-3 text-sm text-slate-400 focus:outline-none focus:border-[#00A99D]">
-                  <option>Pilih Divisi</option>
-                  <option>Information Technology</option>
-                  <option>HRD</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-xs font-bold text-slate-400 mb-2">Gaji Pokok</label>
-                <input type="number" placeholder="Rp 0" className="w-full bg-[#1e1e1e] border border-white/10 rounded-lg p-3 text-sm text-white focus:outline-none focus:border-[#00A99D]"/>
-              </div>
-              <button className="w-full bg-[#005fcc] hover:bg-blue-600 text-white py-3 rounded-lg font-bold transition-all text-sm mt-2">
-                Simpan
-              </button>
-            </form>
-          </div>
-        </div>
-
-        <div className="md:col-span-8">
-          <div className="bg-[#111] p-6 rounded-xl border border-white/10">
-            <div className="flex justify-between items-center mb-6">
-              <h3 className="font-bold">Data Jabatan</h3>
-              <span className="text-xs bg-[#00A99D]/20 text-[#00A99D] px-3 py-1 rounded-full font-bold">{jabatanList.length} Items Total</span>
-            </div>
-            <table className="w-full text-left text-sm">
-              <thead className="bg-[#1e1e1e] text-slate-400 font-bold uppercase text-xs">
-                <tr>
-                  <th className="p-4 rounded-l-lg">NO</th>
-                  <th className="p-4">JABATAN</th>
-                  <th className="p-4">DIVISI</th>
-                  <th className="p-4">GAJI POKOK</th>
-                  <th className="p-4 text-right rounded-r-lg">AKSI</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-white/5">
-                {jabatanList.map((item, index) => (
-                  <tr key={item.id} className="hover:bg-white/5 transition-colors">
-                    <td className="p-4 text-slate-400">{index + 1}</td>
-                    <td className="p-4 font-bold">{item.jabatan}</td>
-                    <td className="p-4"><span className="bg-[#2d2d2d] border border-white/10 px-2 py-1 rounded text-xs text-slate-300">{item.divisi}</span></td>
-                    <td className="p-4 text-[#00A99D] font-bold">Rp {item.gaji.toLocaleString()}</td>
-                    <td className="p-4 text-right flex justify-end gap-2">
-                       <button className="text-yellow-500 hover:text-yellow-400"><Edit size={16} /></button>
-                       <button className="text-red-500 hover:text-red-400"><Trash2 size={16} /></button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
+      <div className="bg-[#0f172a] border border-slate-800 rounded-xl overflow-hidden">
+        <table className="w-full text-left text-sm">
+          <thead className="bg-[#1e293b] text-slate-400 uppercase">
+            <tr>
+              <th className="px-6 py-4">Nama Jabatan</th>
+              <th className="px-6 py-4">Gaji Pokok (Rp)</th>
+              <th className="px-6 py-4">Tunjangan (Rp)</th>
+              <th className="px-6 py-4 text-right">Aksi</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-slate-800">
+            {jabatan.map((item) => (
+              <tr key={item.id} className="hover:bg-slate-800/50">
+                <td className="px-6 py-4 text-white font-medium">{item.nama}</td>
+                <td className="px-6 py-4 text-emerald-400">{item.gapok}</td>
+                <td className="px-6 py-4 text-emerald-400">{item.tunjangan}</td>
+                <td className="px-6 py-4 text-right flex justify-end gap-2">
+                  <button className="p-2 bg-amber-500/10 text-amber-500 rounded hover:bg-amber-500/20"><Pencil size={16} /></button>
+                  <button className="p-2 bg-rose-500/10 text-rose-500 rounded hover:bg-rose-500/20"><Trash2 size={16} /></button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
-    </main>
+    </div>
   );
 }
