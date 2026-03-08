@@ -16,37 +16,59 @@ import {
   LogOut, 
   FileText,
   History,
-  Wallet
+  Wallet,
+  LucideIcon // Import tipe data Icon
 } from "lucide-react";
+
+// 1. Definisi Tipe Data Menu (PENTING BIAR GAK ERROR)
+interface MenuItem {
+  label: string;
+  href: string;
+  icon: LucideIcon;
+}
+
+interface MenuSection {
+  title: string;
+  items: MenuItem[];
+}
 
 export default function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
+  
   const [role, setRole] = useState<string | null>(null);
   const [isClient, setIsClient] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  // 1. Ambil Role dari LocalStorage saat website dimuat
   useEffect(() => {
     setIsClient(true);
     const storedUser = localStorage.getItem("user");
+    
     if (storedUser) {
       try {
         const parsedUser = JSON.parse(storedUser);
-        setRole(parsedUser.role); // "admin" atau "user"
+        setRole(parsedUser.role);
       } catch (e) {
         console.error("Gagal parsing user data", e);
+        setRole(null);
       }
+    } else {
+      setRole(null);
     }
+    setLoading(false);
   }, []);
 
   const isActive = (path: string) => pathname === path;
 
   const handleLogout = () => {
     localStorage.clear();
+    // Hapus cookie role dengan paksa
+    document.cookie.split(";").forEach((c) => {
+      document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+    });
     router.push("/sign-in");
   };
 
-  // Helper untuk styling menu
   const menuItemClass = (path: string) => `
     w-full flex items-center gap-3 p-3 rounded-lg transition-all mb-1 cursor-pointer text-sm font-medium
     ${isActive(path) 
@@ -54,10 +76,8 @@ export default function Sidebar() {
       : "text-slate-400 hover:text-white hover:bg-white/5"}
   `;
 
-  // --- DEFINISI MENU BERDASARKAN ROLE (Sesuai Soal UTS) ---
-
-  // Menu untuk ADMIN (HRD)
-  const adminMenus = [
+  // --- DEFINISI MENU ---
+  const adminMenus: MenuSection[] = [
     {
       title: "DATA MASTER",
       items: [
@@ -89,8 +109,7 @@ export default function Sidebar() {
     }
   ];
 
-  // Menu untuk USER (KARYAWAN)
-  const userMenus = [
+  const userMenus: MenuSection[] = [
     {
       title: "PRESENSI",
       items: [
@@ -112,13 +131,43 @@ export default function Sidebar() {
     }
   ];
 
-  // Tentukan menu mana yang dipakai
-  const menuList = role === "admin" ? adminMenus : userMenus;
+  // 2. Inisialisasi menuList dengan tipe data yang jelas
+  let menuList: MenuSection[] = [];
+  
+  if (!loading) {
+      if (role === "admin") {
+          menuList = adminMenus;
+      } else if (role === "user") {
+          menuList = userMenus;
+      }
+  }
 
-  if (!isClient) return null; // Mencegah hydration mismatch
+  if (!isClient) return null;
+
+  // Render Skeleton jika masih loading
+  if (loading) {
+    return (
+        <aside className="w-64 bg-[#082f49] flex flex-col fixed h-full z-50 border-r border-white/5 font-sans">
+             <div className="p-6 mb-2 flex items-center gap-3">
+                <div className="w-8 h-8 bg-slate-700 rounded animate-pulse"></div>
+                <div className="h-6 bg-slate-700 rounded w-24 animate-pulse"></div>
+             </div>
+             <div className="flex-1 px-4 space-y-4 mt-4">
+                {[1, 2, 3, 4, 5].map((i) => (
+                    <div key={i} className="h-10 bg-slate-800/50 rounded-lg animate-pulse"></div>
+                ))}
+             </div>
+        </aside>
+    );
+  }
+
+  // Jika tidak loading tapi role tidak ada (kecuali di halaman login/signup), jangan render apa-apa
+  if (!role && pathname !== '/sign-in' && pathname !== '/sign-up') {
+      return null; 
+  }
 
   return (
-    <aside className="w-64 bg-[#082f49] flex flex-col fixed h-full z-50 border-r border-white/5 font-sans overflow-hidden">
+    <aside className="w-64 bg-[#082f49] flex flex-col fixed h-full z-50 border-r border-white/5 font-sans overflow-hidden transition-all duration-300">
       
       {/* LOGO */}
       <div className="p-6 mb-2">
@@ -126,11 +175,14 @@ export default function Sidebar() {
           <div className="w-8 h-8 bg-[#00A99D] rounded flex items-center justify-center text-white font-bold text-lg shadow-lg">S</div>
           <span className="text-xl font-bold text-white tracking-tight italic">Salary<span className="text-[#00A99D]">App</span></span>
         </div>
-        <div className="mt-2 px-1">
-            <span className="text-[10px] uppercase tracking-widest text-slate-400 border-b border-white/10 pb-1 block">
-                {role === 'admin' ? 'HRD Administrator' : 'Employee Portal'}
-            </span>
-        </div>
+        
+        {role && (
+            <div className="mt-2 px-1">
+                <span className="text-[10px] uppercase tracking-widest text-slate-400 border-b border-white/10 pb-1 block">
+                    {role === 'admin' ? 'HRD Administrator' : 'Employee Portal'}
+                </span>
+            </div>
+        )}
       </div>
 
       {/* NAVIGASI */}
@@ -147,7 +199,7 @@ export default function Sidebar() {
             </Link>
         </div>
 
-        {/* MENU DINAMIS (Looping) */}
+        {/* MENU DINAMIS */}
         {menuList.map((section, index) => (
             <div key={index}>
                 <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2 px-3 mt-4">
@@ -166,7 +218,6 @@ export default function Sidebar() {
             </div>
         ))}
         
-        {/* Spacer agar logout tidak terlalu mepet kalau menu sedikit */}
         <div className="h-10"></div>
       </nav>
 
