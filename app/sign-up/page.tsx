@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function SignUp() {
   const router = useRouter();
@@ -16,24 +17,32 @@ export default function SignUp() {
     setError("");
     setLoading(true);
 
-    try {
-      const res = await fetch("/api/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password }),
-      });
+    // --- LOGIKA SIMULASI REGISTRASI LANGSUNG LOGIN ---
+    setTimeout(() => {
+      try {
+        // 1. Buat data user baru (Role otomatis jadi 'user' / Karyawan)
+        const newUser = {
+          id: Math.floor(Math.random() * 10000), // ID Acak
+          name: name,
+          email: email,
+          role: "user", // KUNCI: Registrasi selalu jadi USER (Karyawan)
+        };
 
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Pendaftaran gagal");
+        // 2. Simpan ke LocalStorage (Otomatis dianggap Login)
+        localStorage.setItem("user", JSON.stringify(newUser));
+        
+        // 3. Set Cookie (Opsional, untuk konsistensi)
+        document.cookie = "role=user; path=/";
 
-      localStorage.setItem("access_token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user));
-      router.push("/dashboard");
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
+        // 4. Redirect ke Dashboard
+        router.push("/dashboard");
+        router.refresh(); // Refresh agar sidebar mendeteksi user baru
+
+      } catch (err) {
+        setError("Gagal melakukan registrasi.");
+        setLoading(false);
+      }
+    }, 1500); // Simulasi delay loading 1.5 detik
   };
 
   return (
@@ -70,7 +79,7 @@ export default function SignUp() {
             </label>
             <input
               type="email"
-              placeholder="admin@mail.com"
+              placeholder="user@gmail.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full rounded-xl border border-white/10 bg-[#1f2937] px-4 py-3 text-sm outline-none transition-all focus:border-[#005a70] focus:ring-1 focus:ring-[#005a70]"
@@ -92,26 +101,26 @@ export default function SignUp() {
             />
           </div>
 
-          {error && <p className="text-xs font-medium text-red-400">{error}</p>}
+          {error && <p className="text-xs font-medium text-red-400 text-center">{error}</p>}
 
           <button
             disabled={loading}
-            className="w-full rounded-xl bg-[#005a70] py-3 text-sm font-bold tracking-wide text-white transition-all hover:bg-[#007a8a] active:scale-[0.98] disabled:opacity-50"
+            className="w-full rounded-xl bg-[#005a70] py-3 text-sm font-bold tracking-wide text-white transition-all hover:bg-[#007a8a] active:scale-[0.98] disabled:opacity-50 shadow-lg shadow-cyan-900/20"
           >
             {loading ? "Registering..." : "Register"}
           </button>
 
           <p className="text-center text-sm text-slate-500">
             Already have an account?{" "}
-            <a href="/sign-in" className="font-semibold text-sky-500 hover:text-sky-400 transition-colors">
+            <Link href="/sign-in" className="font-semibold text-sky-500 hover:text-sky-400 transition-colors">
               Sign in instead
-            </a>
+            </Link>
           </p>
         </form>
       </main>
 
       <footer className="mt-12 text-xs text-slate-600">
-        © 2024 SalaryApp. All rights reserved.
+        © 2026 SalaryApp. All rights reserved.
       </footer>
     </div>
   );
