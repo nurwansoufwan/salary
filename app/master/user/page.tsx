@@ -167,7 +167,7 @@ export default function PageUser() {
                   onChange={(e) => setRole(e.target.value)}
                   className="w-full bg-[#1e1e1e] border border-white/10 rounded-lg p-3 text-white focus:outline-none focus:border-[#00A99D]"
                 >
-                  <option value="USER">USER</option>
+                  <option value="USER">USERR</option>
                   <option value="ADMIN">ADMIN</option>
                 </select>
               </div>
