@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { User, Mail, Eye } from "lucide-react";
 
 export default function SignUp() {
   const router = useRouter();
@@ -11,108 +12,90 @@ export default function SignUp() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleSignUp = async (e: React.FormEvent) => {
+  const handleSignUp = (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
     setLoading(true);
-
-    try {
-      const res = await fetch("/api/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password }),
-      });
-
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Pendaftaran gagal");
-
-      localStorage.setItem("access_token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user));
+    setTimeout(() => {
+      localStorage.setItem("user", JSON.stringify({ name, email, role: "user" }));
+      document.cookie = "role=user; path=/";
       router.push("/dashboard");
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
+    }, 1500);
   };
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-[#020617] p-4 text-white">
-      {/* Logo Circle */}
-      <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-xl bg-[#005a70] shadow-lg shadow-cyan-900/20">
-        <span className="text-xl font-bold italic">S</span>
-      </div>
-
-      <div className="mb-8 text-center">
-        <h1 className="text-3xl font-bold tracking-tight">Create Account</h1>
-        <p className="mt-2 text-sm text-slate-400">Join SalaryApp to manage your payroll</p>
-      </div>
-
-      <main className="w-full max-w-[400px] rounded-2xl border border-white/5 bg-[#111827]/50 p-8 shadow-2xl backdrop-blur-sm">
-        <form onSubmit={handleSignUp} className="space-y-5">
-          <div>
-            <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-slate-400">
-              Full Name
-            </label>
-            <input
-              type="text"
-              placeholder="John Doe"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="w-full rounded-xl border border-white/10 bg-[#1f2937] px-4 py-3 text-sm outline-none transition-all focus:border-[#005a70] focus:ring-1 focus:ring-[#005a70]"
-              required
-            />
+    <div className="flex min-h-screen items-center justify-center bg-[#0f172a] p-4 font-sans">
+      <main className="flex w-full max-w-5xl overflow-hidden rounded-[40px] bg-[#f8fafc] shadow-[0_20px_50px_rgba(0,0,0,0.3)] md:flex-row">
+        
+        {/* Left Side: Form */}
+        <div className="flex w-full flex-col p-8 md:w-1/2 md:p-12 lg:p-16">
+          <div className="mb-8 flex items-center gap-2">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#1e293b] text-white">
+              <span className="text-xl">✦</span>
+            </div>
+            <span className="text-xl font-bold text-slate-900 tracking-tight">Gradiator</span>
           </div>
 
-          <div>
-            <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-slate-400">
-              Email Address
-            </label>
-            <input
-              type="email"
-              placeholder="admin@mail.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-xl border border-white/10 bg-[#1f2937] px-4 py-3 text-sm outline-none transition-all focus:border-[#005a70] focus:ring-1 focus:ring-[#005a70]"
-              required
-            />
+          <div className="mb-8">
+            <h1 className="text-2xl font-bold text-slate-900">Start Your Journey!</h1>
+            <p className="text-sm text-slate-400">Create an account to manage your payroll</p>
           </div>
 
-          <div>
-            <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-slate-400">
-              Password
-            </label>
-            <input
-              type="password"
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full rounded-xl border border-white/10 bg-[#1f2937] px-4 py-3 text-sm outline-none transition-all focus:border-[#005a70] focus:ring-1 focus:ring-[#005a70]"
-              required
-            />
+          <div className="mb-8 flex rounded-full bg-slate-200/50 p-1">
+            <button onClick={() => router.push("/sign-in")} className="flex-1 rounded-full py-2 text-sm font-semibold text-slate-500 hover:text-slate-700">Sign in</button>
+            <button className="flex-1 rounded-full py-2 text-sm font-semibold bg-[#4a89f3] text-white shadow-md">Sign Up</button>
           </div>
 
-          {error && <p className="text-xs font-medium text-red-400">{error}</p>}
+          <form onSubmit={handleSignUp} className="space-y-4">
+            <div className="relative">
+              <input type="text" placeholder="Full Name" value={name} onChange={(e) => setName(e.target.value)} className="w-full rounded-2xl border border-slate-200 bg-white/70 py-4 pl-5 pr-12 text-sm outline-none transition-all focus:border-[#4a89f3]" required />
+              <User className="absolute right-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
+            </div>
 
-          <button
-            disabled={loading}
-            className="w-full rounded-xl bg-[#005a70] py-3 text-sm font-bold tracking-wide text-white transition-all hover:bg-[#007a8a] active:scale-[0.98] disabled:opacity-50"
-          >
-            {loading ? "Registering..." : "Register"}
-          </button>
+            <div className="relative">
+              <input type="email" placeholder="Email Address" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full rounded-2xl border border-slate-200 bg-white/70 py-4 pl-5 pr-12 text-sm outline-none transition-all focus:border-[#4a89f3]" required />
+              <Mail className="absolute right-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
+            </div>
 
-          <p className="text-center text-sm text-slate-500">
-            Already have an account?{" "}
-            <a href="/sign-in" className="font-semibold text-sky-500 hover:text-sky-400 transition-colors">
-              Sign in instead
-            </a>
+            <div className="relative">
+              <input type="password" placeholder="Create Password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full rounded-2xl border border-slate-200 bg-white/70 py-4 pl-5 pr-12 text-sm outline-none transition-all focus:border-[#4a89f3]" required />
+              <Eye className="absolute right-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
+            </div>
+
+            <button disabled={loading} className="w-full rounded-2xl bg-[#4a89f3] py-4 text-sm font-bold text-white shadow-lg shadow-blue-200 hover:bg-blue-600 transition-all active:scale-[0.98]">
+              {loading ? "Creating Account..." : "Register"}
+            </button>
+          </form>
+
+          <p className="mt-8 text-center text-xs text-slate-400">
+            Already have an account? <span onClick={() => router.push("/sign-in")} className="text-[#4a89f3] font-bold cursor-pointer hover:underline">Sign In Here</span>
           </p>
-        </form>
-      </main>
+        </div>
 
-      <footer className="mt-12 text-xs text-slate-600">
-        © 2024 SalaryApp. All rights reserved.
-      </footer>
+        {/* Right Side: Enhanced Mesh Gradient */}
+        <div className="relative hidden w-1/2 overflow-hidden md:flex">
+          {/* Base Gradient Layer */}
+          <div className="absolute inset-0 bg-[#4a89f3]" />
+          
+          {/* Mesh Gradient Orbs */}
+          <div className="absolute -top-[10%] -left-[10%] h-[70%] w-[70%] rounded-full bg-[#1e4db7] blur-[80px] opacity-80 animate-pulse" />
+          <div className="absolute top-[20%] -right-[20%] h-[60%] w-[60%] rounded-full bg-[#9fc3ff] blur-[100px] opacity-60" />
+          <div className="absolute -bottom-[20%] left-[10%] h-[50%] w-[80%] rounded-full bg-[#6366f1] blur-[90px] opacity-70" />
+
+          {/* Grainy Texture */}
+          <div className="absolute inset-0 opacity-[0.15] mix-blend-overlay" style={{ backgroundImage: `url("https://grainy-gradients.vercel.app/noise.svg")` }} />
+
+          <div className="relative z-10 flex h-full w-full flex-col items-center justify-center p-12 text-center text-white">
+            <div className="mb-6 rounded-3xl border border-white/20 bg-white/10 p-8 backdrop-blur-xl shadow-2xl">
+              <h2 className="text-3xl font-bold tracking-tight">Join the Revolution</h2>
+              <p className="mt-4 text-blue-50/80 leading-relaxed">Manage your work-life balance and finances with the most intuitive dashboard ever made.</p>
+            </div>
+          </div>
+          
+          <div className="absolute bottom-10 left-1/2 w-[80%] -translate-x-1/2 rounded-2xl border border-white/20 bg-white/10 p-4 text-center backdrop-blur-md">
+            <p className="text-[10px] text-white/70">© 2026 abdul. All rights reserved.</p>
+          </div>
+        </div>
+      </main>
     </div>
   );
 }

@@ -164,7 +164,7 @@ export default function JabatanPage() {
 
   return (
     <div className="space-y-8 p-4 lg:p-0">
-      <div>
+      <div className="pl-8">
         <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">Management Jabatan</h2>
         <p className="text-slate-500 dark:text-slate-400 mt-1">Atur struktur organisasi dan standar penggajian.</p>
       </div>
@@ -172,11 +172,13 @@ export default function JabatanPage() {
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 items-start">
         
         {/* ================= FORM SECTION ================= */}
+        
         <div className="lg:col-span-4 rounded-3xl bg-white p-8 shadow-xl shadow-slate-200/50 dark:bg-zinc-900 dark:shadow-none border border-slate-100 dark:border-zinc-800 h-fit lg:sticky lg:top-24">
           <div className="mb-6 flex items-center gap-3">
             <div className={`h-10 w-10 rounded-xl flex items-center justify-center ${editingId ? 'bg-yellow-500/10 text-yellow-500' : 'bg-blue-500/10 text-blue-500'}`}>
               {editingId ? <Edit size={20} /> : <Plus size={20} />}
             </div>
+            
             <h2 className="text-lg font-bold text-slate-900 dark:text-white">
               {editingId ? "Edit Jabatan" : "Tambah Jabatan"}
             </h2>
