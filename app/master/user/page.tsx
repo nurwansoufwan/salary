@@ -167,11 +167,7 @@ export default function PageUser() {
                   onChange={(e) => setRole(e.target.value)}
                   className="w-full bg-[#1e1e1e] border border-white/10 rounded-lg p-3 text-white focus:outline-none focus:border-[#00A99D]"
                 >
-<<<<<<< HEAD
-                  <option value="USER">USERR</option>
-=======
                   <option value="USER">USER</option>
->>>>>>> f6c9514 (apa ajal)
                   <option value="ADMIN">ADMIN</option>
                 </select>
               </div>
